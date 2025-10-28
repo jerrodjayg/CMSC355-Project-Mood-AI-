@@ -23,6 +23,71 @@
         </div>
     </div>
 
+    <!-- Create Account Page -->
+    <div id="create-account-page" class="form-page hidden">
+        <div class="form-header">
+            <button class="form-title-button" id="create-back-btn">Mood AI</button>
+        </div>
+        <div class="form-container">
+            <h2 class="form-heading">Create Account</h2>
+            <form id="create-account-form" class="auth-form">
+                <div class="input-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="firstName" required>
+                </div>
+                <div class="input-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="lastName" required>
+                </div>
+                <div class="input-group">
+                    <label for="create-email">Email</label>
+                    <input type="email" id="create-email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="create-password">Password</label>
+                    <input type="password" id="create-password" name="password" required>
+                </div>
+                <div class="password-requirements">
+                    <p>Password Requirements:</p>
+                    <ul>
+                        <li>Must have a capital letter</li>
+                        <li>Must have a number</li>
+                        <li>Must have a special character: !@#$%^&</li>
+                        <li>Must be between 8-64 characters</li>
+                    </ul>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" required>
+                </div>
+                <div class="error-message" id="create-error"></div>
+                <button type="submit" class="continue-button">Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Form Page -->
+    <div id="login-form-page" class="form-page hidden">
+        <div class="form-header">
+            <button class="form-title-button" id="login-back-btn">Mood AI</button>
+        </div>
+        <div class="form-container">
+            <h2 class="form-heading">Log In</h2>
+            <form id="login-form" class="auth-form">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <div class="error-message" id="login-error"></div>
+                <button type="submit" class="continue-button">Continue</button>
+            </form>
+        </div>
+    </div>
+
     <script src="function.js"></script>
 </body>
 </html>
