@@ -9,7 +9,17 @@ const pages = {
     splash: document.getElementById('splash-screen'),
     login: document.getElementById('login-page'),
     createAccount: document.getElementById('create-account-page'),
-    loginForm: document.getElementById('login-form-page')
+    loginForm: document.getElementById('login-form-page'),
+    moodSelection: document.getElementById('mood-selection-page'),
+    noteEntry: document.getElementById('note-entry-page'),
+    timeSelection: document.getElementById('time-selection-page')
+};
+
+// Store mood data
+let moodData = {
+    mood: null,
+    note: null,
+    reminderTime: { hour: 8, minute: 0, period: 'AM' }
 };
 
 // Utility functions
@@ -185,11 +195,10 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             saveUser(newUser);
-            alert(`Account created successfully! Welcome ${formData.firstName} ${formData.lastName}!`);
             
-            // Reset form and go back to main login page
+            // Reset form and navigate to mood selection screen
             createAccountForm.reset();
-            showPage('login');
+            showPage('moodSelection');
         });
     }
 
@@ -219,15 +228,161 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check credentials against database
             const user = findUser(email, password);
             if (user) {
-                alert(`Welcome back, ${user.firstName}!`);
                 loginForm.reset();
-                // Here you would typically redirect to the main app
-                console.log('Login successful for:', user);
+                // Navigate to mood selection screen
+                showPage('moodSelection');
             } else {
                 showError('login-error', 'Invalid email or password. Please check your credentials.');
             }
         });
     }
+
+    // Mood Selection Page Handlers
+    const moodButtons = document.querySelectorAll('.mood-button');
+    const customMoodInput = document.getElementById('custom-mood-input');
+    const moodNextBtn = document.getElementById('mood-next-btn');
+
+    // Handle mood button clicks
+    moodButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove selected class from all buttons
+            moodButtons.forEach(btn => btn.classList.remove('selected'));
+            // Add selected class to clicked button
+            this.classList.add('selected');
+            // Store the selected mood
+            moodData.mood = this.getAttribute('data-mood');
+            // Clear custom mood input
+            customMoodInput.value = '';
+            clearError('mood-error');
+        });
+    });
+
+    // Handle custom mood input
+    if (customMoodInput) {
+        customMoodInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                // Clear selected button when custom mood is entered
+                moodButtons.forEach(btn => btn.classList.remove('selected'));
+                moodData.mood = this.value.trim();
+                clearError('mood-error');
+            } else {
+                moodData.mood = null;
+            }
+        });
+    }
+
+    // Handle Next button on mood selection
+    if (moodNextBtn) {
+        moodNextBtn.addEventListener('click', function() {
+            // Validate that either a button is selected or custom mood is filled
+            if (!moodData.mood) {
+                showError('mood-error', 'Please state your current mood');
+                return;
+            }
+            // Move to note entry page
+            showPage('noteEntry');
+        });
+    }
+
+    // Note Entry Page Handlers
+    const moodNoteInput = document.getElementById('mood-note-input');
+    const noteNextBtn = document.getElementById('note-next-btn');
+
+    // Handle Next button on note entry
+    if (noteNextBtn) {
+        noteNextBtn.addEventListener('click', function() {
+            const note = moodNoteInput ? moodNoteInput.value.trim() : '';
+            if (!note) {
+                showError('note-error', 'Please enter in a note');
+                return;
+            }
+            // Store the note
+            moodData.note = note;
+            // Move to time selection page
+            showPage('timeSelection');
+        });
+    }
+
+    // Time Selection Page Handlers
+    const hourDisplay = document.getElementById('hour-display');
+    const minuteDisplay = document.getElementById('minute-display');
+    const timePeriod = document.getElementById('time-period');
+    const hourUpBtn = document.getElementById('hour-up');
+    const hourDownBtn = document.getElementById('hour-down');
+    const minuteUpBtn = document.getElementById('minute-up');
+    const minuteDownBtn = document.getElementById('minute-down');
+    const timeConfirmBtn = document.getElementById('time-confirm-btn');
+
+    // Initialize time display (8:00 AM)
+    function updateTimeDisplay() {
+        if (hourDisplay) {
+            hourDisplay.textContent = moodData.reminderTime.hour.toString().padStart(2, '0');
+        }
+        if (minuteDisplay) {
+            minuteDisplay.textContent = moodData.reminderTime.minute.toString().padStart(2, '0');
+        }
+        if (timePeriod) {
+            timePeriod.textContent = moodData.reminderTime.period;
+        }
+    }
+
+    // Handle hour increment
+    if (hourUpBtn) {
+        hourUpBtn.addEventListener('click', function() {
+            moodData.reminderTime.hour++;
+            if (moodData.reminderTime.hour > 12) {
+                moodData.reminderTime.hour = 1;
+                // Toggle period when wrapping from 12 to 1
+                moodData.reminderTime.period = moodData.reminderTime.period === 'AM' ? 'PM' : 'AM';
+            }
+            updateTimeDisplay();
+        });
+    }
+
+    // Handle hour decrement
+    if (hourDownBtn) {
+        hourDownBtn.addEventListener('click', function() {
+            moodData.reminderTime.hour--;
+            if (moodData.reminderTime.hour < 1) {
+                moodData.reminderTime.hour = 12;
+                // Toggle period when wrapping from 1 to 12
+                moodData.reminderTime.period = moodData.reminderTime.period === 'AM' ? 'PM' : 'AM';
+            }
+            updateTimeDisplay();
+        });
+    }
+
+    // Handle minute increment (by 15: 0, 15, 30, 45, then back to 0)
+    if (minuteUpBtn) {
+        minuteUpBtn.addEventListener('click', function() {
+            moodData.reminderTime.minute += 15;
+            if (moodData.reminderTime.minute >= 60) {
+                moodData.reminderTime.minute = 0;
+            }
+            updateTimeDisplay();
+        });
+    }
+
+    // Handle minute decrement (by 15: 45, 30, 15, 0, then back to 45)
+    if (minuteDownBtn) {
+        minuteDownBtn.addEventListener('click', function() {
+            moodData.reminderTime.minute -= 15;
+            if (moodData.reminderTime.minute < 0) {
+                moodData.reminderTime.minute = 45;
+            }
+            updateTimeDisplay();
+        });
+    }
+
+    // Handle Confirm button
+    if (timeConfirmBtn) {
+        timeConfirmBtn.addEventListener('click', function() {
+            alert('End of Sprint 2');
+        });
+    }
+
+    // Initialize time display on load
+    updateTimeDisplay();
 });
 
 // Optional: Skip splash screen on any key press

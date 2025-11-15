@@ -88,6 +88,61 @@
         </div>
     </div>
 
+    <!-- Mood Selection Page -->
+    <div id="mood-selection-page" class="mood-page hidden">
+        <div class="mood-container">
+            <h2 class="mood-question">What is your current mood?</h2>
+            <div class="mood-buttons-container">
+                <button class="mood-button" data-mood="Happy">Happy</button>
+                <button class="mood-button" data-mood="Sad">Sad</button>
+                <button class="mood-button" data-mood="Irritated">Irritated</button>
+                <button class="mood-button" data-mood="Mad">Mad</button>
+                <button class="mood-button" data-mood="Okay">Okay</button>
+            </div>
+            <div class="custom-mood-group">
+                <input type="text" id="custom-mood-input" class="custom-mood-input" placeholder="Enter custom mood">
+            </div>
+            <div class="error-message" id="mood-error"></div>
+            <button id="mood-next-btn" class="mood-next-button">Next</button>
+        </div>
+    </div>
+
+    <!-- Note Entry Page -->
+    <div id="note-entry-page" class="mood-page hidden">
+        <div class="mood-container">
+            <h2 class="mood-question">Write a short note as to why this is your current mood</h2>
+            <div class="note-input-group">
+                <textarea id="mood-note-input" class="note-textarea" placeholder="Enter your note here..."></textarea>
+            </div>
+            <div class="error-message" id="note-error"></div>
+            <button id="note-next-btn" class="mood-next-button">Next</button>
+        </div>
+    </div>
+
+    <!-- Time Selection Page -->
+    <div id="time-selection-page" class="mood-page hidden">
+        <div class="mood-container">
+            <h2 class="mood-question">Choose your preferred reminder time</h2>
+            <div class="time-picker-container">
+                <div class="time-display">
+                    <div class="time-unit">
+                        <button class="time-arrow time-arrow-up" id="hour-up">▲</button>
+                        <span class="time-value" id="hour-display">08</span>
+                        <button class="time-arrow time-arrow-down" id="hour-down">▼</button>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-unit">
+                        <button class="time-arrow time-arrow-up" id="minute-up">▲</button>
+                        <span class="time-value" id="minute-display">00</span>
+                        <button class="time-arrow time-arrow-down" id="minute-down">▼</button>
+                    </div>
+                    <span class="time-period" id="time-period">AM</span>
+                </div>
+            </div>
+            <button id="time-confirm-btn" class="mood-next-button">Confirm</button>
+        </div>
+    </div>
+
     <script src="function.js"></script>
 </body>
 </html>
